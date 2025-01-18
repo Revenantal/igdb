@@ -1,4 +1,4 @@
-import GameCard from "@/components/GameCard/GameCard";
+import GameCard, { GameCardProps } from "@/components/GameCard/GameCard";
 
 async function getGames() {
   const response = await fetch(
@@ -27,7 +27,7 @@ export default async function Home() {
 
   return (
     <div className="container mx-auto grid 2xl:grid-cols-6 xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 py-10 px-5">
-      {games?.map((game) => {
+      {games?.map((game: GameCardProps) => {
         return <GameCard key={game.id} {...game} />;
       })}
 
