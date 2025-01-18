@@ -26,11 +26,15 @@ export default async function Home() {
   const games = await getGames();
 
   return (
-    <div className="container mx-auto grid 2xl:grid-cols-6 xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 py-10 px-5">
-      {games?.map((game: GameCardProps) => {
-        return <GameCard key={game.id} {...game} />;
-      })}
 
+    <div className="px-5 py-10">
+      <div className="container mx-auto">
+        <div className="grid 2xl:grid-cols-6 xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4">
+          {games?.map((game: GameCardProps) => {
+          return <GameCard key={game.id} {...game} />;
+          })}
+        </div>
+      </div>
     </div>
   );
 }
