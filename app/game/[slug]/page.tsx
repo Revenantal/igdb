@@ -1,4 +1,5 @@
 export const revalidate = 3600;
+
 import Image from "next/image";
 import Card from "@/components/Card";
 import Rating from "@/components/Rating/Rating";
