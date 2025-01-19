@@ -4,12 +4,13 @@ async function getGames() {
   const response = await fetch(
     "https://api.igdb.com/v4/games",
     { method: 'POST',
+      cache: 'default',
       headers: {
         'Accept': 'application/json',
         'Client-ID': 'wq7hizkfqjksc657idbj0gfwwh1rnd',
         'Authorization': 'Bearer hdmntpf3xvrh72boqk95e30l39ov1e',
       },
-      body: "fields name,slug,cover.image_id,rating,first_release_date; sort rating desc; where rating != null; limit 30;"
+      body: "fields name,slug,cover.image_id,rating,first_release_date; sort first_release_date desc; where rating != null; limit 30;"
   });
 
   if (!response.ok) {
