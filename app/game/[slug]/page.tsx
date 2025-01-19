@@ -3,6 +3,7 @@ import Image from "next/image";
 import Card from "@/components/Card";
 import Rating from "@/components/Rating/Rating";
 
+type Params = Promise<{ slug: string }>
 
 async function getGame(slug: string) {
     const response = await fetch(
@@ -27,10 +28,10 @@ async function getGame(slug: string) {
 }
 
 
-export default async function GamePage({ params }: { params: { slug: string }}) {
+export default async function GamePage(props: { params: Params }) {
 
-    const promisedParams = await params;
-    const game = await getGame(promisedParams.slug);
+    const params = await props.params;
+    const game = await getGame(params.slug);
 
     return (
         <div className="px-5 py-10">
@@ -52,7 +53,7 @@ export default async function GamePage({ params }: { params: { slug: string }}) 
                     </Card>
 
                     <Card className="col-span-12 grid grid-cols-5 gap-4">
-                        {game.screenshots && game.screenshots.map((screenshot: any) => {
+                        {game.screenshots && game.screenshots.map((screenshot: {image_id: number, id: number}) => {
                             return <Image key={screenshot.id} src={`https://images.igdb.com/igdb/image/upload/t_cover_big/${screenshot.image_id}.jpg`} alt="" width={264} height={374} className="rounded" />
                         })}
                     </Card>
