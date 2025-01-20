@@ -23,7 +23,7 @@ function getReleaseDate(first_release_date: number) {
 export default async function GameCard({ id, name, slug, cover, rating, first_release_date }: GameCardProps) {
     return (
         <Link 
-            href={`/game/${slug}`} 
+            href={`/games/${slug}`} 
             key={id} 
             className="transition rounded-md bg-slate-900 p-4 text-white hover:scale-105 hover:rotate-1"
         >

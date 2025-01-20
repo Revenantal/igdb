@@ -3,14 +3,14 @@ export const revalidate = 3600;
 import Image from "next/image";
 import Card from "@/components/Card";
 import Rating from "@/components/Rating/Rating";
-import { Suspense } from "react";
 
 type Params = Promise<{ slug: string }>
 
 async function getGame(slug: string) {
     const response = await fetch(
-        "https://api.igdb.com/v4/games",
-        { method: 'POST',
+        "https://api.igdb.com/v4/games",{ 
+            method: 'POST',
+            next: { revalidate: 3600 },
             cache: 'default',
             headers: {
             'Accept': 'application/json',
@@ -25,7 +25,7 @@ async function getGame(slug: string) {
       }
     
       const data = await response.json();
-      console.log(data[0])
+      //console.log(data[0])
       return data[0]
 }
 
