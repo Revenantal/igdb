@@ -3,6 +3,7 @@ export const revalidate = 3600;
 import Image from "next/image";
 import Card from "@/components/Card";
 import Rating from "@/components/Rating/Rating";
+import { Suspense } from "react";
 
 type Params = Promise<{ slug: string }>
 
@@ -38,7 +39,6 @@ export default async function GamePage(props: { params: Params }) {
         <div className="px-5 py-10">
             <div className="container mx-auto">
                 <div className="grid grid-cols-12 gap-4">
-
                     <div className="col-span-2 gap-4 grid">
                         <Image src={`https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover.image_id}.jpg`} alt={game.name || 'Game cover'} width={264} height={374} className="rounded" />
                     </div>
@@ -58,7 +58,6 @@ export default async function GamePage(props: { params: Params }) {
                             return <Image key={screenshot.id} src={`https://images.igdb.com/igdb/image/upload/t_cover_big/${screenshot.image_id}.jpg`} alt="" width={264} height={374} className="rounded" />
                         })}
                     </Card>
-                    
             
 
                 </div>

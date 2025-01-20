@@ -1,0 +1,6 @@
+Setup GameInterface https://github.com/vercel/next.js/blob/canary/examples/cms-kontent-ai/pages/posts/%5Bslug%5D.tsx ?
+
+Move API call into a util function?
+Figure out how to handle bearer token refresh
+Add Pagination
+Build out game page
