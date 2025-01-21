@@ -1,7 +1,11 @@
 import IGDB from "@/lib/IGDB";
-import GameCard, { GameCardProps } from "@/components/GameCard/GameCard";
+import GameCard from "@/components/GameCard/GameCard";
 
-export default async function Home() {
+export const metadata = {
+  title: 'Catalog',
+}
+
+export default async function Page() {
 
   const games = await IGDB.getGames();
   const gameCount = await IGDB.getGameCount();

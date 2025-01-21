@@ -1,15 +1,30 @@
 import Image from "next/image";
 import Card from "@/components/Card";
 import IGDB from "@/lib/IGDB";
+import type { Metadata } from 'next';
 
 export const revalidate = 3600;
 
-type Params = Promise<{ slug: string }>
+type Props = {
+    params: Promise <{ slug: string }>
+}
 
-export default async function GamePage(props: { params: Params }) {
+export async function generateMetadata(
+    { params }: Props
+  ): Promise<Metadata> {
 
-    const params = await props.params;
-    const { name, cover, summary, rating, first_release_date, screenshots } = await IGDB.getGame(params.slug);
+    const slug = (await params).slug
+    const { name } = await IGDB.getGame(slug);
+
+    return {
+        title:  name,
+    }
+}
+
+
+export default async function GamePage({ params }: Props) {
+    const slug = (await params).slug;
+    const { name, cover, summary, rating, first_release_date, screenshots } = await IGDB.getGame(slug);
 
     return (
     <div className="px-5 py-10">
@@ -34,8 +49,6 @@ export default async function GamePage(props: { params: Params }) {
                         return <Image key={screenshot.id} src={`https://images.igdb.com/igdb/image/upload/t_cover_big/${screenshot.image_id}.jpg`} alt="" width={264} height={374} className="rounded" />
                     })}
                 </Card>
-        
-
             </div>
         </div>
     </div>

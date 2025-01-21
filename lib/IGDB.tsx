@@ -38,7 +38,6 @@ export default class IGDB {
      */
     static async getGame(slug: string, body: string = this.fields + ' limit 1; where slug =' ): Promise<Game> {
         const res = await IGDB.apiRequest("https://api.igdb.com/v4/games", `${body} "${slug}";`);
-        console.log(res[0]);
         return res[0] as Game;
     }
  
