@@ -15,7 +15,7 @@ import Game from '@/interfaces/game';
 export default class IGDB {
 
     // The default fields to request from the IGDB API.
-    static fields = "fields name, summary, rating_count, slug, rating, first_release_date, screenshots.image_id, cover.image_id;";
+    static fields = "fields name, summary, rating_count, slug, rating, first_release_date, screenshots.image_id, cover.image_id, artworks.*;";
     
     /**
      * Fetches a list of games from the IGDB API.

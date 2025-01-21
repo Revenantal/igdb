@@ -8,6 +8,7 @@ export default interface Game {
     first_release_date: number;
     cover: Image;
     screenshots: Image[];
+    artworks: Image[];
 }
 
 export interface Image {
