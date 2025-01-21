@@ -1,4 +1,5 @@
-import { JSONFilePreset } from 'lowdb/node'
+import { JSONFilePreset } from 'lowdb/node';
+import Game from '@/interfaces/game';
 
 /**
  * IGDB class provides methods to interact with the IGDB API.
@@ -13,20 +14,42 @@ import { JSONFilePreset } from 'lowdb/node'
  */
 export default class IGDB {
 
+    // The default fields to request from the IGDB API.
+    static fields = "fields name, summary, rating_count, slug, rating, first_release_date, screenshots.image_id, cover.image_id;";
+    
+    /**
+     * Fetches a list of games from the IGDB API.
+     *
+     * @param {string} [body=this.fields + 'sort hypes desc; limit 30;'] - The request body to send to the IGDB API. Defaults to sorting by hypes in descending order and limiting the results to 30 games.
+     * @returns {Promise<Game[]>} A promise that resolves to an array of Game objects.
+     */
+    static async getGames(body: string =  this.fields + 'sort hypes desc; limit 30;'): Promise<Game[]> {
+        const res = await IGDB.apiRequest("https://api.igdb.com/v4/games", body);
+        return res.map((game: Game) => ({ ...game }));
+    }
 
-    static async getGames() {
-        const res = IGDB.apiRequest("https://api.igdb.com/v4/games", "fields name,slug,cover.image_id,rating,first_release_date; sort hypes desc; limit 30;");
-        return res;
+    
+    /**
+     * Fetches a game from the IGDB API based on the provided slug.
+     *
+     * @param slug - The unique identifier for the game.
+     * @param body - The query body to be sent with the request. Defaults to the class's fields with a limit of 1 and a where clause for the slug.
+     * @returns A promise that resolves to a Game object.
+     */
+    static async getGame(slug: string, body: string = this.fields + ' limit 1; where slug =' ): Promise<Game> {
+        const res = await IGDB.apiRequest("https://api.igdb.com/v4/games", `${body} "${slug}";`);
+        console.log(res[0]);
+        return res[0] as Game;
     }
  
     /**
      * Retrieves the total count of games from the IGDB API.
      * 
-     * @returns {Promise<any>} A promise that resolves to the response from the IGDB API containing the game count.
+     * @returns {Promise<Number>} A promise that resolves to the response from the IGDB API containing the game count.
      */
     static async getGameCount() { 
-        const res = IGDB.apiRequest("https://api.igdb.com/v4/games/count", "*;");
-        return res;
+        const res = await IGDB.apiRequest("https://api.igdb.com/v4/games/count", "*;");
+        return res.count;
     }
 
     /**

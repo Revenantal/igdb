@@ -1,18 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import type { ComponentPropsWithoutRef } from "react";
+import Game from '@/interfaces/game';
 
-export interface GameCardProps extends ComponentPropsWithoutRef<"input"> {
-    id: string;
-    name: string;
-    slug: number;
-    rating: number;
-    first_release_date: number;
-    cover: {
-        id: string;
-        image_id: string;
-    }
-}
 
 function getReleaseDate(first_release_date: number) {
     const date = new Date(first_release_date * 1000);
@@ -20,7 +9,7 @@ function getReleaseDate(first_release_date: number) {
 }
 
 
-export default async function GameCard({ id, name, slug, cover, rating, first_release_date }: GameCardProps) {
+export default async function GameCard({slug, id, cover, name, rating, first_release_date}: Game) {
     return (
         <Link 
             href={`/games/${slug}`} 
