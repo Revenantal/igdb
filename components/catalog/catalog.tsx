@@ -13,7 +13,7 @@ export default async function Catalog({
     const games = await IGDB.getGames(query, currentPage);
 
     return (
-        <div className="grid 2xl:grid-cols-6 xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4">
+        <div className="flex flex-wrap gap-2 justify-center">
             {games?.map((game: Game) => {
                 return <GameCard key={game.id} {...game} />;
             })}

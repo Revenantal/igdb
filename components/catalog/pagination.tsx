@@ -7,7 +7,7 @@ import PageLink from './pageLink';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons'
  
-export default function Pagination({ totalItems, perPage = 30}: { totalItems: number, perPage?: number }) {
+export default function Pagination({ totalItems, perPage = 50}: { totalItems: number, perPage?: number }) {
     const pathname = usePathname();
     const searchParams = useSearchParams();
     const currentPage = Number(searchParams.get('page')) || 1;

@@ -20,13 +20,13 @@ export default class IGDB {
     /**
      * Fetches a list of games from the IGDB API.
      *
-     * @param {string} [body=this.fields + 'sort hypes desc; limit 30;'] - The request body to send to the IGDB API. Defaults to sorting by hypes in descending order and limiting the results to 30 games.
+     * @param {string} [body=this.fields + 'sort hypes desc; limit 50;'] - The request body to send to the IGDB API. Defaults to sorting by hypes in descending order and limiting the results to 50 games.
      * @returns {Promise<Game[]>} A promise that resolves to an array of Game objects.
      */
     static async getGames(
         query?: string,
         offset: number = 0,
-        limit: number = 30,
+        limit: number = 50,
         fields: string = this.fields,
         sort: string = 'sort hypes desc'
     ): Promise<Game[]> {

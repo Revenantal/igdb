@@ -29,18 +29,20 @@ export default async function Page(props: {
         <div className="mb-5">
           <Search placeholder="Search for a Game!" />
         </div>
-        
-        <div className="mb-10">
-          <Suspense key={query + currentPage} fallback={<div>Loading...</div>}>
-            <Catalog query={query} currentPage={currentPage} />
-          </Suspense>
-        </div>
-
-        <div className="mb-5 flex w-full justify-center">
-          <Pagination totalItems={totalItems} />
-        </div>
-
       </div>
+        
+      <div className="mb-10">
+        <Suspense key={query + currentPage} fallback={<div>Loading...</div>}>
+          <Catalog query={query} currentPage={currentPage} />
+        </Suspense>
+      </div>
+
+        <div className="sticky bottom-3 left-0 right-0 flex">
+          <div className="backdrop-filter bg-slate-900 backdrop-blur-md backdrop-brightness-50 bg-opacity-70 mx-auto w-auto p-3 px-10 rounded">
+            <Pagination totalItems={totalItems} />
+          </div>
+        </div>
+
     </div>
   );
 }
