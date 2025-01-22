@@ -1,27 +1,45 @@
 import IGDB from "@/lib/IGDB";
-import GameCard from "@/components/GameCard/GameCard";
+import Search from "@/components/search";
+import Catalog from "@/components/catalog/catalog";
+import Pagination from "@/components/catalog/pagination";
+import { Suspense } from "react";
 
 export const metadata = {
   title: 'Catalog',
 }
 
-export default async function Page() {
+export default async function Page(props: {
+  searchParams?: Promise<{
+    query?: string;
+    page?: string;
+  }>;
+}) {
 
-  const games = await IGDB.getGames();
-  const gameCount = await IGDB.getGameCount();
+  const searchParams = await props.searchParams;
+  const query = searchParams?.query || '';
+  const currentPage = Number(searchParams?.page) || 1;
+
+  const totalItems = await IGDB.getGameCount(query);
 
   return (
 
     <div className="px-5 py-10">
       <div className="container mx-auto">
-        <h1 className="text-3xl font-bold mb-5">{gameCount} Games and counting!</h1>
-        <div className="grid 2xl:grid-cols-6 xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4">
-          {games?.map((game) => {
-            return <GameCard key={game.id} {...game} />;
-          })}
+
+        <div className="mb-5">
+          <Search placeholder="Search for a Game!" />
+        </div>
+        
+        <div className="mb-10">
+          <Suspense key={query + currentPage} fallback={<div>Loading...</div>}>
+            <Catalog query={query} currentPage={currentPage} />
+          </Suspense>
         </div>
 
-        <h1 className="text-3xl font-bold my-5">Pagination coming soon. Im slow.</h1>
+        <div className="mb-5 flex w-full justify-center">
+          <Pagination totalItems={totalItems} />
+        </div>
+
       </div>
     </div>
   );

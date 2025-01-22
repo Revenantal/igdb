@@ -15,7 +15,7 @@ import { get } from '@vercel/edge-config';
 export default class IGDB {
 
     // The default fields to request from the IGDB API.
-    static fields = "fields name, summary, rating_count, slug, rating, first_release_date, screenshots.image_id, cover.image_id, artworks.*;";
+    static fields = "fields name, summary, rating_count, slug, rating, first_release_date, screenshots.image_id, cover.image_id, artworks.*";
 
     /**
      * Fetches a list of games from the IGDB API.
@@ -23,7 +23,28 @@ export default class IGDB {
      * @param {string} [body=this.fields + 'sort hypes desc; limit 30;'] - The request body to send to the IGDB API. Defaults to sorting by hypes in descending order and limiting the results to 30 games.
      * @returns {Promise<Game[]>} A promise that resolves to an array of Game objects.
      */
-    static async getGames(body: string = this.fields + 'sort hypes desc; limit 30;'): Promise<Game[]> {
+    static async getGames(
+        query?: string,
+        offset: number = 0,
+        limit: number = 30,
+        fields: string = this.fields,
+        sort: string = 'sort hypes desc'
+    ): Promise<Game[]> {
+
+        let body = `${fields};`
+
+        if (query) {
+            body += `where name ~ *"${query}"*;`
+        }
+
+        if (sort) {
+            body += `sort hypes desc;`
+        }
+
+        body += `offset ${offset * limit};`
+
+        body += `limit ${limit};`;
+
         const res = await IGDB.apiRequest("https://api.igdb.com/v4/games", body);
         return res.map((game: Game) => ({ ...game }));
     }
@@ -36,8 +57,9 @@ export default class IGDB {
      * @param body - The query body to be sent with the request. Defaults to the class's fields with a limit of 1 and a where clause for the slug.
      * @returns A promise that resolves to a Game object.
      */
-    static async getGame(slug: string, body: string = this.fields + ' limit 1; where slug ='): Promise<Game> {
-        const res = await IGDB.apiRequest("https://api.igdb.com/v4/games", `${body} "${slug}";`);
+    static async getGame(slug: string): Promise<Game> {
+        const body = `${this.fields}; limit 1; where slug = "${slug}";`;
+        const res = await IGDB.apiRequest("https://api.igdb.com/v4/games", body);
         return res[0] as Game;
     }
 
@@ -46,8 +68,16 @@ export default class IGDB {
      * 
      * @returns {Promise<Number>} A promise that resolves to the response from the IGDB API containing the game count.
      */
-    static async getGameCount() {
-        const res = await IGDB.apiRequest("https://api.igdb.com/v4/games/count", "*;");
+    static async getGameCount(
+        query?: string,
+    ): Promise<number> {
+
+        let body = '*;'
+        if (query) {
+            body = `where name ~ *"${query}"*;`
+        } 
+
+        const res = await IGDB.apiRequest("https://api.igdb.com/v4/games/count", body);
         return res.count;
     }
 
