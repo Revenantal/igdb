@@ -15,39 +15,60 @@ import { get } from '@vercel/edge-config';
 export default class IGDB {
 
     // The default fields to request from the IGDB API.
-    static fields = "fields name, summary, rating_count, slug, rating, first_release_date, screenshots.image_id, cover.image_id, artworks.*";
+    static fields = "fields name, summary, rating_count, slug, rating, first_release_date, screenshots.image_id, cover.image_id, artworks.*, genres.id, platforms.id, player_perspectives.id, game_modes.id, release_dates.status, hypes";
 
-    /**
-     * Fetches a list of games from the IGDB API.
-     *
-     * @param {string} [body=this.fields + 'sort hypes desc; limit 50;'] - The request body to send to the IGDB API. Defaults to sorting by hypes in descending order and limiting the results to 50 games.
-     * @returns {Promise<Game[]>} A promise that resolves to an array of Game objects.
-     */
+
     static async getGames(
-        query?: string,
+        queryParams: { name: string, value: string }[] = [],
         offset: number = 0,
         limit: number = 50,
         fields: string = this.fields,
-        sort: string = 'sort hypes desc'
-    ): Promise<Game[]> {
+    ): Promise<[{
+        name: string,
+        count?: number
+        result?: Game[]
+    }]> {
 
-        let body = `${fields};`
 
-        if (query) {
-            body += `where name ~ *"${query}"*;`
+        const sort = `${queryParams.find(param => param.name === 'order_by')?.value || 'hypes'} ${queryParams.find(param => param.name === 'order_direction')?.value || 'desc'}`;
+        let where = this.queryParamsToWhere(queryParams);
+        if (where) {
+            where = `where ${where};`
         }
+        const body: string[] = [
+            `query games/count "total" {*; ${where}};`,
+            `query games "games" {${fields}; ${where} offset ${offset * limit}; limit ${limit}; sort ${sort};};`,
+            
+        ];
 
-        if (sort) {
-            body += `sort hypes desc;`
-        }
+        const res = await IGDB.apiRequest("https://api.igdb.com/v4/multiquery", body.join(''));
 
-        body += `offset ${offset * limit};`
-
-        body += `limit ${limit};`;
-
-        const res = await IGDB.apiRequest("https://api.igdb.com/v4/games", body);
-        return res.map((game: Game) => ({ ...game }));
+        return res;
     }
+
+    private static queryParamsToWhere(queryParams: { name: string, value: string }[]): string {
+        if (queryParams.length > 0) {
+            return queryParams.map(param => {
+
+                if (param.name == 'order_by' || param.name == 'order_direction') {
+                    return;
+                }
+
+                if (param.name == 'release_dates.status') {
+                    return `(${param.name} = ${param.value})`;
+                }
+
+                if (param.name == 'query') {
+                    return `(name ~ *"${param.value}"*)`;
+                }
+
+                return `(${param.name} = [${param.value}])`;
+
+            }).filter(n => n).join(' & ');
+        }
+
+        return '';
+    };
 
 
     /**
@@ -206,5 +227,30 @@ export default class IGDB {
         }
 
         return true;
+    }
+
+    static async getGenres(): Promise<{ id: string, name: string }[]> {
+        const body = "fields name,id; limit 250; sort name asc;";
+        const res = await IGDB.apiRequest("https://api.igdb.com/v4/genres", body,undefined,86400 * 7);
+        return res;
+    }
+
+    static async getPlatforms(): Promise<{ id: string, name: string }[]> {
+        const body = "fields name,id; limit 250; sort name asc;";
+        const res = await IGDB.apiRequest("https://api.igdb.com/v4/platforms", body,undefined,86400 * 7);
+        return res;
+    }
+
+    static async getFilterValues(): Promise<{ name: string, result: { id: number, name: string, slug?: string }[] }[]> {
+        const body: string[] = [
+            'query genres "genres" {fields name;limit 500;};',
+            'query platforms "platforms" {fields name;limit 500;};',
+            'query player_perspectives "player_perspectives" {fields name;limit 500;};',
+            'query release_date_statuses "release_date_statuses" {fields name;limit 500;};',
+            'query game_modes "game_modes" {fields name;limit 500;};',
+        ];
+
+        const res = await IGDB.apiRequest("https://api.igdb.com/v4/multiquery", body.join(''),undefined,86400);
+        return res;
     }
 }

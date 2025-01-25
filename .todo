@@ -1,7 +1,6 @@
-Setup GameInterface https://github.com/vercel/next.js/blob/canary/examples/cms-kontent-ai/pages/posts/%5Bslug%5D.tsx ?
-
-
-Add Pagination
-Build out game page
-
-Write function to retry requests within lib/IGDB.tsx
+- Fix the way tags stack when there are several in the catalog
+- Write function to retry requests within lib/IGDB.tsx
+- Figure out loading animations on the game library
+- Add hover effect to game cards that includes some more details about the game at a glance
+- Build the game page
+- Investigate page jumping when changing filters

@@ -1,22 +1,24 @@
 import GameCard from "@/components/GameCard/GameCard";
 import Game from "@/interfaces/game";
-import IGDB from "@/lib/IGDB";
 
 export default async function Catalog({
-    query,
-    currentPage
+    games,
 }: {
-    query?: string;
-    currentPage?: number;
+    games: Game[];
 }) {
 
-    const games = await IGDB.getGames(query, currentPage);
-
     return (
-        <div className="flex flex-wrap gap-2 justify-center">
-            {games?.map((game: Game) => {
-                return <GameCard key={game.id} {...game} />;
-            })}
+        <div className="flex flex-wrap gap-3 justify-center">
+            {games.length > 0 ? (
+                games?.map((game: Game) => {
+                    return <GameCard key={game.id} {...game} />;
+                })
+            ): (
+                <div className="text-center text-2xl text-slate-500 w-full mt-10">
+                    No games found!
+                </div>
+            )}
+
         </div>
     )
 }

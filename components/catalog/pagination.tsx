@@ -19,7 +19,6 @@ export default function Pagination({ totalItems, perPage = 50}: { totalItems: nu
         return `${pathname}?${params.toString()}`;
     };
 
-
     return (
         <>
             <div>
@@ -37,7 +36,7 @@ export default function Pagination({ totalItems, perPage = 50}: { totalItems: nu
                     
                     <PageLink>{currentPage}</PageLink>
 
-                    { currentPage < totalPages - 1 && <PageLink href={createPageURL(currentPage + 1 )}>{currentPage + 1}</PageLink> }
+                    { currentPage <= totalPages - 1 && <PageLink href={createPageURL(currentPage + 1 )}>{currentPage + 1}</PageLink> }
 
                     { currentPage < totalPages - 2 && <PageLink href={createPageURL(currentPage + 2 )}>{currentPage + 2}</PageLink> }
 
@@ -46,7 +45,7 @@ export default function Pagination({ totalItems, perPage = 50}: { totalItems: nu
                         <PageLink href={createPageURL(totalPages)}>{totalPages}</PageLink>  
                     </>}
 
-                    { currentPage < totalPages - 1 && <PageLink href={createPageURL(currentPage + 1 )}><FontAwesomeIcon icon={faAngleRight} /></PageLink> }
+                    { currentPage <= totalPages - 1 && <PageLink href={createPageURL(currentPage + 1 )}><FontAwesomeIcon icon={faAngleRight} /></PageLink> }
                 </div>
 
                 <div className="text-center text-zinc-500">
