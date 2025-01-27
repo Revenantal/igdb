@@ -1,36 +1,24 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# IGDB Database
+IGDB Database is learning project used to explore the vast data stored within [IGDB](https://www.igdb.com/). This project is an early attempt at gaining further experince with the Next.Js, and React ecosystem.
 
-## Getting Started
+## Demo
+This project can be viewed at https://igdb-nu.vercel.app/.
 
-First, run the development server:
+## Set Up
+To get this project running locally a Vercel Account will be required with a Edge Config Store. Setup can be achieved with the following steps.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1. Duplicate `.env.example` to `.env.development.local`
+2. Review `.env.development.local` and place the relevant config values in here.
+    - `EDGE_CONFIG` - [Read More Here](https://vercel.com/docs/storage/edge-config)
+    - `EDGE_CONFIG_ID` - [Read More Here](https://vercel.com/docs/storage/edge-config)
+    - `VERCEL_TOKEN` - [Read More Here](https://vercel.com/guides/how-do-i-use-a-vercel-api-access-token)
+    - `TWITCH_CLIENT_ID` - [Read More Here](https://api-docs.igdb.com/#account-creation)
+    - `TWITCH_CLIENT_SECRET` - [Read More Here](https://api-docs.igdb.com/#account-creation)
+3. Run `npm install`
+4. Run `npm run dev`
+5. Go to https://localhost:3000
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Objectives
+Primarily this project is being used to gain refine my abilities in the modern development world with a focus of using the latest and greatest technology (at this current time) and deploying them in a practical and usable application.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The nightly branch has been left in place for your entertainment and to follow my learning.
